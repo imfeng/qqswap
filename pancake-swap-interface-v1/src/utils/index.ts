@@ -19,11 +19,17 @@ export function isAddress(value: any): string | false {
 
 const BSCSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   56: '',
-  97: 'testnet.'
+  97: 'testnet.',
+  [ChainId.ARBTESTNET]: 'arbitrum.'
 }
 
 export function getBscScanLink(chainId: ChainId, data: string, type: 'transaction' | 'token' | 'address'): string {
-  const prefix = `https://${BSCSCAN_PREFIXES[chainId] || BSCSCAN_PREFIXES[ChainId.MAINNET]}bscscan.com`
+  let prefix = ''
+  if(chainId === ChainId.ARBTESTNET) {
+    prefix = 'https://sepolia.arbiscan.io'
+  } else {
+    prefix = `https://${BSCSCAN_PREFIXES[chainId] || BSCSCAN_PREFIXES[ChainId.MAINNET]}bscscan.com`
+  }
 
   switch (type) {
     case 'transaction': {
